@@ -17,6 +17,13 @@ def is_link(user_input:str):
     else:
         return None
     
+def is_in_list(url:str) -> bool:
+    for domain in domain_check_list:
+        if domain in url:
+            return True
+        else:
+            return None
+
 load_dotenv()
 TOKEN:Final[str] = os.getenv('DISCORD_TOKEN2')
 
