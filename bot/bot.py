@@ -16,6 +16,7 @@ def is_link(user_input:str):
         return url
     else:
         return None
+    
 load_dotenv()
 TOKEN:Final[str] = os.getenv('DISCORD_TOKEN2')
 
