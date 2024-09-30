@@ -7,6 +7,10 @@ import re
 load_dotenv()
 TOKEN:Final[str] = os.getenv('DISCORD_TOKEN2')
 
+intents: Intents = Intents.default()
+intents.message_content = True
+client: Client = Client(intents=intents)
+
 domain_check_list = ["reddit", "instagram","twitter", "tiktok"] # // Temporary list of a domain where a video extraction will happen // 
 
 def is_link(user_input:str):
@@ -26,13 +30,6 @@ def is_in_list(url:str) -> bool:
             return True
         else:
             return None
-
-
-
-intents: Intents = Intents.default()
-intents.message_content = True
-client: Client = Client(intents=intents)
-
 
 @client.event
 async def on_ready() -> None:
