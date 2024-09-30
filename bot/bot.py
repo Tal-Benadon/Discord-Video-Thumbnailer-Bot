@@ -35,19 +35,14 @@ async def handle_received_message(message:Message, user_message:str) -> str:
     if not link or not is_in_list(link):
         return None
     else:
-        try:
-            sent_standby_message = await message.channel.send(standby_message)
-            file_path = download_video(link)
-            if file_path:
-                await sent_standby_message.delete()
-                return file_path
         
-        except Exception as e:
-            print(e)
+        sent_standby_message = await message.channel.send(standby_message)
+        file_path = download_video(link)
+        if file_path:
             await sent_standby_message.delete()
-            sent_error_message = await message.channel.send(error_message) 
-            await asyncio.sleep(5)
-            await sent_error_message.delete()
+            return file_path
+        
+  
     
 
 @client.event
