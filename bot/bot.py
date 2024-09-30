@@ -26,7 +26,16 @@ async def on_message(message: Message) -> None:
     
     print(f'[{channel}] {username}: "{user_message}"')
     
-    await handle_received_message(message, user_message)
+    file_path = await handle_received_message(message, user_message)
+
+
+
+    
+    
+    
+
+
+     
     
     
     
