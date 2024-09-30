@@ -1,13 +1,8 @@
-from typing import Final
 import asyncio
 from discord import Intents, Client, Message, File
-from dotenv import load_dotenv
-from downloader.downloader.py import download_video
 import os
 import re
-
-load_dotenv()
-TOKEN:Final[str] = os.getenv('DISCORD_TOKEN2')
+from downloader.downloader import download_video
 
 intents: Intents = Intents.default()
 intents.message_content = True
@@ -41,18 +36,18 @@ async def handle_received_message(message:Message, user_message:str) -> str:
         return None
     else:
         try:
-            standby_message = await message.channel.send(standby_message)
+            sent_standby_message = await message.channel.send(standby_message)
             file_path = download_video(link)
             if file_path:
-                standby_message.delete()
+                await sent_standby_message.delete()
                 return file_path
         
         except Exception as e:
             print(e)
-            await standby_message.delete()
-            error_message = await message.channel.send(error_message) 
+            await sent_standby_message.delete()
+            sent_error_message = await message.channel.send(error_message) 
             await asyncio.sleep(5)
-            await error_message.delete()
+            await sent_error_message.delete()
     
 
 @client.event
@@ -81,29 +76,6 @@ async def on_message(message: Message) -> None:
             os.remove(file_path)
         except Exception as e:
             print(f"An error occured\n{e}")
-            error_message = await message.channel.send(error_message)
+            sent_error_message = await message.channel.send(error_message)
             await asyncio.sleep(5)
-            await error_message.delete()
-            
-    
-def activate_bot() -> None:
-    client.run(token=TOKEN)
-    
-activate_bot()
-
-
-
-    
-    
-    
-
-
-     
-    
-    
-    
-    
-    
-
-# def main() -> None:
-#     Client.run(token=TOKEN)
+            await sent_error_message.delete()
