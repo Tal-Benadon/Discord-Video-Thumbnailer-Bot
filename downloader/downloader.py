@@ -11,7 +11,8 @@ def download_video(video_url: str ):
     ydl_opt = {'outtmpl': video_path_template}
 
     with yt_dlp.YoutubeDL(ydl_opt) as ydl:
-        info = ydl.extract_info(video_url, download=True)
+        info = ydl.extract_info(video_url, download=False)
+        print(info)
+        # video_path = os.path.join(video_dir, f"{info['title']}.{info['ext']}")
         
-        video_path = os.path.join(video_dir, f"{info['title']}.{info['ext']}")
-    return video_path
+    # return video_path

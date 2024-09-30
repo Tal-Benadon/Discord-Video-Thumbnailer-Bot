@@ -10,7 +10,7 @@ client: Client = Client(intents=intents)
 standby_message = "Trying to get that video for you"
 error_message = "An error eccured getting your video, sorry :("
 
-domain_check_list = ["reddit", "instagram","twitter", "tiktok"] # // Temporary list of a domain where a video extraction will happen // 
+domain_check_list = ["reddit","instagram","twitter","tiktok"] # // Temporary list of a domain where a video extraction will happen // 
 
 def is_link(user_input:str):
     
@@ -24,23 +24,24 @@ def is_link(user_input:str):
         return None
     
 def is_in_list(url:str) -> bool:
-    for domain in domain_check_list:
-        if domain in url:
-            return True
-        else:
-            return None
+    return any(domain in url for domain in domain_check_list )
+ 
 
 async def handle_received_message(message:Message, user_message:str) -> str:
+    
     link = is_link(user_message)
     if not link or not is_in_list(link):
         return None
     else:
-        
-        sent_standby_message = await message.channel.send(standby_message)
-        file_path = download_video(link)
-        if file_path:
-            await sent_standby_message.delete()
-            return file_path
+        try:
+            sent_standby_message = await message.channel.send(standby_message)
+            file_path = download_video(link)
+            if file_path:
+                await sent_standby_message.delete()
+                return file_path
+        except Exception as e:
+            print("not a video DEBUG") 
+            return None
         
   
     
@@ -60,9 +61,10 @@ async def on_message(message: Message) -> None:
     
     print(f'[{channel}] {username}: "{user_message}"')
     
-
-    file_path = await handle_received_message(message, user_message)
-  
+    try:
+        file_path = await handle_received_message(message, user_message)
+    except Exception as e:
+        print("Error occured")
     if file_path: 
         try:
             with open(file_path, 'rb') as f:
