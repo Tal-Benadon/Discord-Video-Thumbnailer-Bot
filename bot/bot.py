@@ -2,8 +2,13 @@ import asyncio
 from discord import Intents, Client, Message, File
 import os
 import re
-import providers
+import json
 from downloader.downloader import download_video
+providers_json_path = os.path.join(os.path.dirname(__file__), '..','providers.json')
+with open(providers_json_path, 'r') as json_file:
+    providers = json.load(json_file)
+    
+print(providers)
 
 intents: Intents = Intents.default()
 intents.message_content = True
@@ -11,8 +16,6 @@ client: Client = Client(intents=intents)
 standby_message = "Trying to get that video for you"
 error_message = "An error eccured getting your video, sorry :("
 
-domain_check_list = providers
-print (domain_check_list)
 def is_link(user_input:str):
     
     url_pattern = re.compile(r'https?://\S+|www\.\S+')
@@ -25,7 +28,7 @@ def is_link(user_input:str):
         return None
     
 def is_in_list(url:str) -> bool:
-    return any(domain in url for domain in domain_check_list )
+    return any(domain in url for domain in providers )
  
 
 async def handle_received_message(message:Message, user_message:str) -> str:
