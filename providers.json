@@ -1,0 +1,8 @@
+{
+    "providers": [
+        "reddit",
+        "instagram",
+        "twitter",
+        "tiktok"
+    ]
+}

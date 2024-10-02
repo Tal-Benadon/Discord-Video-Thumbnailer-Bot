@@ -2,6 +2,7 @@ import asyncio
 from discord import Intents, Client, Message, File
 import os
 import re
+import providers
 from downloader.downloader import download_video
 
 intents: Intents = Intents.default()
@@ -10,8 +11,8 @@ client: Client = Client(intents=intents)
 standby_message = "Trying to get that video for you"
 error_message = "An error eccured getting your video, sorry :("
 
-domain_check_list = ["reddit","instagram","twitter","tiktok"] # // Temporary list of a domain where a video extraction will happen // 
-
+domain_check_list = providers
+print (domain_check_list)
 def is_link(user_input:str):
     
     url_pattern = re.compile(r'https?://\S+|www\.\S+')
