@@ -6,7 +6,7 @@ import json
 from downloader.downloader import download_video
 providers_json_path = os.path.join(os.path.dirname(__file__), '..','providers.json')
 with open(providers_json_path, 'r') as json_file:
-    providers = json.load(json_file)
+    providers = json.load(json_file)['providers']
     
 
 
@@ -28,16 +28,19 @@ def is_link(user_input:str):
         return None
     
 def is_in_list(url:str) -> bool:
-    return any(domain in url for domain in providers )
+    print(providers)
+    return any(domain in url for domain in providers)
  
 
 async def handle_received_message(message:Message, user_message:str) -> str:
     
     link = is_link(user_message)
-    if not link or not is_in_list(link):
+    
+    if not link or not is_in_list(link): # // TODO: YT-dlp instagram extractor is bugged, might need to use Playwright until fixed 
         return None
     else:
         try:
+            
             sent_standby_message = await message.channel.send(standby_message)
             file_path = download_video(link)
             if file_path:
