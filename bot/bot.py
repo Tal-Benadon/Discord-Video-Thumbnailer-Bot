@@ -8,7 +8,7 @@ providers_json_path = os.path.join(os.path.dirname(__file__), '..','providers.js
 with open(providers_json_path, 'r') as json_file:
     providers = json.load(json_file)
     
-print(providers)
+
 
 intents: Intents = Intents.default()
 intents.message_content = True
