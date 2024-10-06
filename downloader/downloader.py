@@ -12,7 +12,11 @@ def download_video(video_url: str ):
 
     with yt_dlp.YoutubeDL(ydl_opt) as ydl:
         info = ydl.extract_info(video_url, download=False)
-        print(info)
-        # video_path = os.path.join(video_dir, f"{info['title']}.{info['ext']}")
-        
-    # return video_path
+        if not info.get('type') is None or info.get('type') != "playlist":
+            ydl.download([video_url])
+            print(f"info {info}")
+            video_title = info.get('title','unkown_title')
+            video_ext = info.get('ext', 'mp4')
+            video_path = os.path.join(video_dir, f'{video_title}.{video_ext}')
+            return video_path
+   
