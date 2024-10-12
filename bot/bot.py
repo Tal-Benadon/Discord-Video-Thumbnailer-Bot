@@ -47,7 +47,7 @@ async def handle_received_message(message:Message, user_message:str) -> str:
                 await sent_standby_message.delete()
                 return file_path
         except Exception as e:
-            print("not a video DEBUG") 
+            print(f"not a video DEBUG{e}") 
             return None
         
   
