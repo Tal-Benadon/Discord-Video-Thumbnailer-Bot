@@ -38,7 +38,7 @@ jobs:
       with:
         context: .
         push: true
-        tags: ${{ steps.login-ecr.outputs.registry }}/discord-video-bot:${{ steps.extract_version.outputs.version }}
+        tags: ${{ steps.login-ecr.outputs.registry }}/tal-benadon/discord-video-bot:${{ steps.extract_version.outputs.version }}
     
     # - name: Logout of Amazon ECR
     #   uses: aws-actions/amazon-ecr-logout@v1
