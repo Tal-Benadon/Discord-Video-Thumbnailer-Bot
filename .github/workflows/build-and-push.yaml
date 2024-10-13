@@ -1,0 +1,44 @@
+name: Deploy Discord Bot to ECR
+
+on:
+  push:
+    branches: 
+      - 'release/**'
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write
+      contents: read
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ECR_Power_User
+        aws-region: il-central-1
+    
+    - name: Login to ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Extract Version from branch name
+      id: extract_version
+      run: |
+        echo "version=$(echo ${GITHUB_REF#refs/heads/release/})" >> $GITHUB_OUTPUT
+    
+    - name: Build and push the docker image 
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        push: true
+        tags: ${{ steps.login-ecr.outputs.registry }}/discord-video-bot:${{ steps.extract_version.outputs.version }}
+    
+    - name: Logout of Amazon ECR
+      uses: aws-actions/amazon-ecr-logout@v1
